@@ -106,10 +106,13 @@ public class WordleTrackerService {
 
         for (int i = 0; i < players.size(); i++) {
             Player player = players.get(i);
-            String formattedDate = LocalDateTime.now().format(formatter);
+
+            String lastPlayed = resultRepository.findLastPlayedByPlayer(player)
+                            .map(result -> result.getDate().format(formatter))
+                                    .orElse("Never");
 
             leaderboard.append(String.format("%d. %s: %d %s (Last played: %s)\n",
-                    i + 1, player.getUsername(), player.getScore(), constants.SCORE_TITLE, formattedDate));
+                    i + 1, player.getUsername(), player.getScore(), constants.SCORE_TITLE, lastPlayed));
 
             // Add separator if this isn't the last player and there's more than one player
             if (players.size() > 1 && i < players.size() - 1) {

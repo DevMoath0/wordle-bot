@@ -22,4 +22,7 @@ public interface WordleResultRepository extends JpaRepository<WordleResult, Long
             @Param("player") Player player,
             @Param("date") LocalDateTime date
     );
+
+    @Query("SELECT w FROM WordleResult w WHERE w.player = :player ORDER BY w.date DESC LIMIT 1")
+    Optional<WordleResult> findLastPlayedByPlayer(@Param("player") Player player);
 }
