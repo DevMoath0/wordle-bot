@@ -80,7 +80,7 @@ public class WordleTrackerBotService extends TelegramLongPollingBot {
             boolean isLoss = false;
 
             if (charBeforeSlash == 'X' || charBeforeSlash == 'x') {
-                tries = 6;
+                tries = 7;
                 isLoss = true;
             } else {
                 tries = Character.getNumericValue(charBeforeSlash);
@@ -121,6 +121,7 @@ public class WordleTrackerBotService extends TelegramLongPollingBot {
             case 4 -> "👏"; // Good
             case 5 -> "👍"; // Ok
             case 6 -> "😅"; // Close call
+            case 7 -> "😭"; // Didn't get the answer
             default -> "📝"; // Fallback
         };
     }

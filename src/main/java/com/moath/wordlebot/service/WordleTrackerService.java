@@ -102,7 +102,7 @@ public class WordleTrackerService {
         Constants constants = new Constants();
 
         StringBuilder leaderboard = new StringBuilder("🏆 Wordle Leaderboard 🏆\n\n");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy hh:mm a");
 
         for (int i = 0; i < players.size(); i++) {
             Player player = players.get(i);
