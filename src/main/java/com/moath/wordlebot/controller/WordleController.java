@@ -45,4 +45,9 @@ public class WordleController {
     public ResponseEntity<String> getHelp() {
         return ResponseEntity.ok(wordleTrackerService.getHelp());
     }
+
+    @GetMapping("/nafar")
+    public ResponseEntity<String> getNafar() {
+        return ResponseEntity.ok(wordleTrackerService.getNafar());
+    }
 }

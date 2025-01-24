@@ -106,7 +106,16 @@ public class WordleTrackerBotService extends TelegramLongPollingBot {
             log.debug("Leaderboard request detected");
             String leaderboard = wordleTrackerService.getLeaderboard();
             sendMessage(chatId, leaderboard);
-        } else {
+        } else if (messageText.equalsIgnoreCase("/help")) {
+            log.debug("Help request detected");
+            String help = wordleTrackerService.getHelp();
+            sendMessage(chatId, help);
+        } else if (messageText.equalsIgnoreCase("/nafar")) {
+            log.debug("Nafar request detected");
+            String nafar = wordleTrackerService.getNafar();
+            sendMessage(chatId, nafar);
+        }
+        else {
             log.debug("Message did not match any known commands: '{}'", messageText);
         }
     }

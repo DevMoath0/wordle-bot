@@ -6,6 +6,7 @@ import com.moath.wordlebot.repository.PlayerRepository;
 import com.moath.wordlebot.repository.WordleResultRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.bcel.Const;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ import com.moath.wordlebot.model.WordleResult;
 public class WordleTrackerService {
     private final PlayerRepository playerRepository;
     private final WordleResultRepository resultRepository;
+    Constants constants = new Constants();
 
     @Transactional
     public boolean recordResult(String telegramId, String username, int tries) {
@@ -61,7 +63,7 @@ public class WordleTrackerService {
     }
 
     @Transactional
-    @Scheduled(cron = "0 59 23 * * *")
+    @Scheduled(cron = "55 59 23 * * *")
     public void processEndOfDay() {
         LocalDateTime now = LocalDateTime.now();
 
@@ -98,31 +100,40 @@ public class WordleTrackerService {
 
     public String getLeaderboard() {
         List<Player> players = playerRepository.findAll();
-        players.sort(Comparator.comparing(Player::getScore).reversed());
-        Constants constants = new Constants();
+        players.sort(Comparator.comparing(Player::getScore));
 
-        StringBuilder leaderboard = new StringBuilder("🏆 Wordle Leaderboard 🏆\n\n");
+        StringBuilder leaderboard = new StringBuilder("🏆 *Wordle Leaderboard* 🏆\n\n");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy hh:mm a");
 
         for (int i = 0; i < players.size(); i++) {
             Player player = players.get(i);
 
             String lastPlayed = resultRepository.findLastPlayedByPlayer(player)
-                            .map(result -> result.getDate().format(formatter))
-                                    .orElse("Never");
+                    .map(result -> result.getDate().format(formatter))
+                    .orElse("Never");
 
-            leaderboard.append(String.format("%d. %s: %d %s (Last played: %s)\n",
-                    i + 1, player.getUsername(), player.getScore(), constants.SCORE_TITLE, lastPlayed));
+            // Add player details in a neat format with additional spacing for readability
+            leaderboard.append(String.format("*%d.* %s\n", i + 1, player.getUsername()));
+            leaderboard.append(String.format("  🏅 Score: *%d* %s\n", player.getScore(), constants.SCORE_TITLE));
+            leaderboard.append(String.format("  🗓️ _Last played:_ %s\n", lastPlayed));
 
-            // Add separator if this isn't the last player and there's more than one player
+            // Add a separator line if it's not the last player
             if (players.size() > 1 && i < players.size() - 1) {
-                leaderboard.append("-------------\n");
+                leaderboard.append("\n──────────────\n\n");
             }
         }
+
+        // Add final space for clarity
+        leaderboard.append("\n*End of Leaderboard*");
+
         return leaderboard.toString();
     }
 
     public String getHelp() {
-        return "Available commands: \n /leaderboard";
+        return "Available commands: \n/leaderboard\n/nafar";
+    }
+
+    public String getNafar() {
+        return constants.NAFAR;
     }
 }
