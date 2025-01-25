@@ -11,7 +11,7 @@ Welcome to the **Wordle Telegram Bot** repository! This bot allows you and your 
 - **Missed Results**: If a player fails to submit their result on time, they get a penalty.
 - **Daily Processing**: The bot automatically processes the results at the end of each day, updating the leaderboard and assigning points.
 - **Flexible Score Calculation**: The player with the highest tries gets +1 point, and those who miss a submission get +2 points.
-- **Interactive Commands**: Players can use `/help` to see available commands like `/leaderboard`.
+- **Interactive Commands**: Players can use `/help` to see available commands like `/leaderboard` or `/nafar`.
 
 ---
 
