@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/wordle")
 @RequiredArgsConstructor
@@ -15,6 +16,7 @@ public class WordleController {
     @PostMapping("/result")
     public ResponseEntity<WordleResultDto> recordResult(@RequestBody WordleResultDto result) {
         try {
+            log.info("Recording result...");
             if(result.getTries() >= 1 && result.getTries() <= 6) {
                 wordleTrackerService.recordResult(result.getTelegramId(),
                         result.getUsername(),
