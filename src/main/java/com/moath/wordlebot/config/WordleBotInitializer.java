@@ -21,17 +21,21 @@ public class WordleBotInitializer {
     @EventListener({ContextRefreshedEvent.class})
     public void init() {
         try {
-            // First, try to delete any existing webhook
+            log.info("Attempting to delete existing webhook...");
             DeleteWebhook deleteWebhook = new DeleteWebhook();
-            wordleBot.execute(deleteWebhook);
+            boolean isWebhookDeleted = wordleBot.execute(deleteWebhook);
+            log.info("Webhook deletion status: {}", isWebhookDeleted);
 
-            // Then initialize the bot with long polling
+            log.info("Initializing bot with long polling...");
             TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
             telegramBotsApi.registerBot(wordleBot);
 
             log.info("Bot successfully initialized and registered");
         } catch (TelegramApiException e) {
             log.error("Failed to initialize bot: {}", e.getMessage(), e);
+            if (e.getMessage().contains("401 Unauthorized")) {
+                log.error("Invalid bot token. Please verify the token and try again.");
+            }
             throw new RuntimeException("Failed to initialize Telegram bot: " + e.getMessage(), e);
         }
     }
